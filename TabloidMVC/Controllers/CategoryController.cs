@@ -18,6 +18,7 @@ namespace TabloidMVC.Controllers
         {
             _categoryRepository = categoryRepository;
         }
+
         // GET: CategoryController
         public IActionResult Index()
         {
@@ -92,12 +93,6 @@ namespace TabloidMVC.Controllers
             {
                 return View();
             }
-        }
-
-        private int GetCurrentUserProfileId()
-        {
-            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return int.Parse(id);
         }
     }
 }
