@@ -1,16 +1,26 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using TabloidMVC.Repositories;
+using TabloidMVC.Models;
+using System.Collections.Generic;
 
 namespace TabloidMVC.Controllers
 {
     [Authorize]
     public class TagsController : Controller
     {
+        private readonly ITagRepository _tagRepo;
+        public TagsController(ITagRepository tagRepo)
+        {
+            _tagRepo = tagRepo;
+        }
+
         // GET: TagsController
         public ActionResult Index()
         {
-            return View();
+            List<Tag> tags = _tagRepo.GetAllTags();
+            return View(tags);
         }
 
         // GET: TagsController/Details/5
