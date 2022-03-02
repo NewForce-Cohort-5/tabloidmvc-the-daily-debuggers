@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Extensions.Configuration;
 using TabloidMVC.Models;
 
@@ -39,6 +38,7 @@ namespace TabloidMVC.Repositories
         {
             using (var conn = Connection)
             {
+                conn.Open();
                 using var cmd = conn.CreateCommand();
                 {
                     cmd.CommandText = @"
@@ -46,7 +46,10 @@ namespace TabloidMVC.Repositories
                         OUTPUT INSERTED.ID
                         VALUES(@Name)";
                     cmd.Parameters.AddWithValue("@Name", category.Name);
-                    category.Id = (int)cmd.ExecuteScalar();
+
+                    int newlyCreatedId = (int)cmd.ExecuteScalar();
+
+                    category.Id = newlyCreatedId;
                 }
             }
         }
