@@ -20,22 +20,23 @@ namespace TabloidMVC.Repositories
                 {
                     cmd.CommandText = @"
                         SELECT [Id], [Name] FROM Tag
+                        ORDER BY [Name]
                     ";
 
-                    SqlDataReader dr = cmd.ExecuteReader();
+                    SqlDataReader reader = cmd.ExecuteReader();
 
-                    while (dr.Read())
+                    while (reader.Read())
                     {
                         Tag tag = new Tag()
                         {
-                            Id = dr.GetInt32(dr.GetOrdinal("Id")),
-                            Name = dr.GetString(dr.GetOrdinal("Name"))
+                            Id = reader.GetInt32(reader.GetOrdinal("Id")),
+                            Name = reader.GetString(reader.GetOrdinal("Name"))
                         };
 
                         tags.Add(tag);
                     }
 
-                    dr.Close();
+                    reader.Close();
 
                     return tags;
                 }

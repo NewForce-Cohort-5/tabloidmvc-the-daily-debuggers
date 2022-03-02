@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.Configuration;
 using TabloidMVC.Models;
 
@@ -7,6 +8,7 @@ namespace TabloidMVC.Repositories
     public class CategoryRepository : BaseRepository, ICategoryRepository
     {
         public CategoryRepository(IConfiguration config) : base(config) { }
+        // Function for pulling all of the Categories from the database
         public List<Category> GetAll()
         {
             using (var conn = Connection)
@@ -14,7 +16,7 @@ namespace TabloidMVC.Repositories
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT id, name FROM Category";
+                    cmd.CommandText = "SELECT Id, Name FROM Category ORDER BY Name";
                     var reader = cmd.ExecuteReader();
 
                     var categories = new List<Category>();
@@ -24,12 +26,10 @@ namespace TabloidMVC.Repositories
                         categories.Add(new Category()
                         {
                             Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                            Name = reader.GetString(reader.GetOrdinal("name")),
+                            Name = reader.GetString(reader.GetOrdinal("Name")),
                         });
                     }
-
                     reader.Close();
-
                     return categories;
                 }
             }
