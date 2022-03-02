@@ -18,7 +18,7 @@ namespace TabloidMVC.Controllers
         {
             _categoryRepository = categoryRepository;
         }
-
+        // Calls the GetAll function from the CategoryRepository and is used to create an index within the category views
         // GET: CategoryController
         public IActionResult Index()
         {
