@@ -25,6 +25,7 @@ namespace TabloidMVC.Controllers
         }
 
         //Posts sorted by PublishDateTime newest first
+
         public IActionResult Index()
         {
             //Return posts
@@ -34,16 +35,34 @@ namespace TabloidMVC.Controllers
             return View(posts);
         }
 
+        //Sorted by CreatedDateTime
         public IActionResult MyPosts()
         {
             //Return posts
             var posts = _postRepository.GetAllPublishedPosts();
             //Sort Only posts that match current user
             posts.Where(p => GetCurrentUserProfileId() == p.UserProfileId);
+            //Sort by CreatedDateTime
+            posts.Sort((y, x) => DateTime.Compare(x.CreateDateTime, y.CreateDateTime));
             return View(posts);
         }
 
         public IActionResult Details(int id)
+        {
+            var post = _postRepository.GetPublishedPostById(id);
+            if (post == null)
+            {
+                int userId = GetCurrentUserProfileId();
+                post = _postRepository.GetUserPostById(id, userId);
+                if (post == null)
+                {
+                    return NotFound();
+                }
+            }
+            return View(post);
+        }
+
+        public IActionResult MyPostDetails(int id)
         {
             var post = _postRepository.GetPublishedPostById(id);
             if (post == null)
@@ -95,8 +114,10 @@ namespace TabloidMVC.Controllers
 
         
         // GET: PostsController/Edit
+        [Authorize]
         public ActionResult Edit(int id)
         {
+
             List<Category> categories = _categoryRepository.GetAll();
             Post post = _postRepository.GetPublishedPostById(id);
 
@@ -109,7 +130,7 @@ namespace TabloidMVC.Controllers
             vm.CategoryOptions = _categoryRepository.GetAll();
 
 
-            if (post == null)
+            if (post == null || post.UserProfileId != GetCurrentUserProfileId())
             {
                 return NotFound();
             }
@@ -131,6 +152,11 @@ namespace TabloidMVC.Controllers
 
             };
             vm.CategoryOptions = _categoryRepository.GetAll();
+
+            if (post == null || post.UserProfileId != GetCurrentUserProfileId())
+            {
+                return NotFound();
+            }
             try
             {
                 vm.Post.IsApproved = true;
@@ -148,8 +174,12 @@ namespace TabloidMVC.Controllers
         // GET: PostController/Delete
         public ActionResult Delete(int id)
         {
+            
             Post post = _postRepository.GetPublishedPostById(id);
-
+            if (post == null || post.UserProfileId != GetCurrentUserProfileId())
+            {
+                return NotFound();
+            }
             return View(post);
         }
 
@@ -158,6 +188,7 @@ namespace TabloidMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, Post post)
         {
+            
             try
             {
                 _postRepository.DeletePost(id);
