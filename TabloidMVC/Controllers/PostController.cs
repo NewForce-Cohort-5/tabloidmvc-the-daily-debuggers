@@ -42,7 +42,11 @@ namespace TabloidMVC.Controllers
             var posts = _postRepository.GetAllPublishedPosts();
             //Sort Only posts that match current user
             posts.Where(p => GetCurrentUserProfileId() == p.UserProfileId);
+<<<<<<< HEAD
             //Sort by CreatedDateTime
+=======
+            //Sort by CreatedDateTime newest created first
+>>>>>>> main
             posts.Sort((y, x) => DateTime.Compare(x.CreateDateTime, y.CreateDateTime));
             return View(posts);
         }
