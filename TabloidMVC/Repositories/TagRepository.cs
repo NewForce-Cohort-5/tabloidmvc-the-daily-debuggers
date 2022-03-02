@@ -50,9 +50,9 @@ namespace TabloidMVC.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        INSERT INTO [Tag] ([Id], [Name])
+                        INSERT INTO [Tag] ([Name])
                         OUTPUT INSERTED.ID
-                        VALUES (@id, @name)
+                        VALUES (@name)
                     ";
 
                     cmd.Parameters.AddWithValue("@name", tag.Name);
