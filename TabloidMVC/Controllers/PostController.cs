@@ -8,6 +8,7 @@ using System.Security.Claims;
 using TabloidMVC.Models;
 using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
+using System.Linq;
 
 namespace TabloidMVC.Controllers
 {
@@ -23,9 +24,22 @@ namespace TabloidMVC.Controllers
             _categoryRepository = categoryRepository;
         }
 
+        //Posts sorted by PublishDateTime newest first
         public IActionResult Index()
         {
+            //Return posts
             var posts = _postRepository.GetAllPublishedPosts();
+            //Sort by PublishDateTime
+            posts.Sort((y, x) => DateTime.Compare((DateTime)x.PublishDateTime, (DateTime)y.PublishDateTime));
+            return View(posts);
+        }
+
+        public IActionResult MyPosts()
+        {
+            //Return posts
+            var posts = _postRepository.GetAllPublishedPosts();
+            //Sort Only posts that match current user
+            posts.Where(p => GetCurrentUserProfileId() == p.UserProfileId);
             return View(posts);
         }
 
