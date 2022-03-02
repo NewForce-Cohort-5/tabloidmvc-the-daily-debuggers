@@ -145,10 +145,11 @@ namespace TabloidMVC.Controllers
         // POST: PostsController/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public ActionResult Edit(int id, Post post)
         {
             List<Category> categories = _categoryRepository.GetAll();
-            
+            post.UserProfileId = _postRepository.GetPublishedPostById(id).UserProfileId;
             var vm = new PostCreateViewModel()
             {
                 Post = post,
