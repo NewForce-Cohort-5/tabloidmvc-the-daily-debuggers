@@ -55,6 +55,8 @@ namespace TabloidMVC.Repositories
                         WHERE [Id] = @id
                     ";
 
+                    cmd.Parameters.AddWithValue("@id", id);
+
                     SqlDataReader reader = cmd.ExecuteReader();
 
                     Tag tag = null;
