@@ -55,7 +55,7 @@ namespace TabloidMVC.Controllers
         public ActionResult Edit(int id)
         {
             Tag tag = _tagRepo.GetTagById(id);
-            return View();
+            return View(tag);
         }
 
         // POST: TagsController/Edit/5
