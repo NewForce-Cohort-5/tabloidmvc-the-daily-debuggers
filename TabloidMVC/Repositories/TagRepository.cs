@@ -126,6 +126,9 @@ namespace TabloidMVC.Repositories
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
+                        DELETE FROM PostTag
+                        WHERE [TagId] = @id
+
                         DELETE FROM Tag
                         WHERE [Id] = @id
                     ";
