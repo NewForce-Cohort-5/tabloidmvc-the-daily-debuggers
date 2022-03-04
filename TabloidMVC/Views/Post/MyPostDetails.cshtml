@@ -29,7 +29,9 @@
         {
             <section class="row justify-content-center">
                 <div>
+
                     <img src="@Model.ImageLocation" style="width:350px; height:350px;" />
+
                 </div>
             </section>
         }
@@ -38,6 +40,7 @@
         </section>
     </div>
 
+
      <a asp-action="Comments" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="View">
             <i>Comments</i>
         </a>
@@ -45,4 +48,5 @@
         <a asp-action="MyPosts" class="btn btn-outline-primary mx-1" title="View">
             <i>Back To My Post</i>
         </a>
+
 </div>

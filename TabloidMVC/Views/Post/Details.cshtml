@@ -22,6 +22,7 @@
 
             </div>
             
+
             @if ( CUID == Model.UserProfileId)
             {<div class="row">
                 <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="Edit">
@@ -33,6 +34,7 @@
             </div>
             }
             
+
         </section>
         <hr />
         @if (!string.IsNullOrWhiteSpace(Model.ImageLocation))
