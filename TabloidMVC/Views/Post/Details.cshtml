@@ -34,4 +34,11 @@
             <p class="col-sm-12 mt-5">@Html.DisplayFor(model => model.Content)</p>
         </section>
     </div>
+    <td>
+                        <a asp-action="Comments" asp-route-id="@Model.Id" class="btn btn-outline-primary mx-1" title="View">
+                            <i>Comments</i>
+                        </a>
+                       
+                       
+                    </td>
 </div>

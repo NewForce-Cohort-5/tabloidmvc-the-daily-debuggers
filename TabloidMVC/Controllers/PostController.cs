@@ -17,11 +17,15 @@ namespace TabloidMVC.Controllers
     {
         private readonly IPostRepository _postRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly ICommentRepository _commentRepository;
 
-        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository)
+
+        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, ICommentRepository commentRepository)
         {
             _postRepository = postRepository;
             _categoryRepository = categoryRepository;
+            _commentRepository = commentRepository;
+
         }
 
         //Posts sorted by PublishDateTime newest first
@@ -61,6 +65,18 @@ namespace TabloidMVC.Controllers
                 }
             }
             return View(post);
+        }
+
+        public IActionResult Comments(int id)
+        {
+            var comment = _commentRepository.GetAllCommentsByPostId(id);
+            //if (comment == null)
+            //{
+                
+            //        return NotFound();
+                
+            //}
+            return View(comment);
         }
 
         public IActionResult MyPostDetails(int id)
