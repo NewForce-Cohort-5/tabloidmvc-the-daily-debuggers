@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using TabloidMVC.Models;
@@ -48,7 +49,7 @@ namespace TabloidMVC.Controllers
                 _categoryRepository.AddCategory(category);
                 return RedirectToAction("Index");
             }
-            catch
+            catch (Exception)
             {
                 return View(category);
             }
@@ -69,7 +70,7 @@ namespace TabloidMVC.Controllers
             {
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception)
             {
                 return View();
             }
@@ -78,21 +79,28 @@ namespace TabloidMVC.Controllers
         // GET: CategoryController/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            Category category = _categoryRepository.GetCategoryById(id);
+            ViewData["Message"] = $"Are you sure you want to delete {category.Name}?";
+            return View(category);
         }
 
         // POST: CategoryController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(int id, Category category)
         {
             try
             {
+                _categoryRepository.DeleteCategory(id);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                if (ex.Message.Contains("The DELETE statement conflicted with the REFERENCE constraint"))
+                {
+                    ViewData["Message"] = $"This category cannot be deleted";
+                }
+                    return View(category);
             }
         }
     }
