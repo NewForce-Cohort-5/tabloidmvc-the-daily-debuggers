@@ -48,6 +48,7 @@ namespace TabloidMVC.Controllers
             posts = posts.Where(p => GetCurrentUserProfileId() == p.UserProfileId).ToList();
 
             //Sort by CreatedDateTime newest created first
+
             posts.Sort((y, x) => DateTime.Compare(x.CreateDateTime, y.CreateDateTime));
             return View(posts);
         }
