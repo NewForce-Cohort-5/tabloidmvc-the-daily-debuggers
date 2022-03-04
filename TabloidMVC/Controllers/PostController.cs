@@ -54,7 +54,11 @@ namespace TabloidMVC.Controllers
 
         public IActionResult Details(int id)
         {
+
+            //Pass the Current userid to HTML file
             ViewData["currentUserId"] = GetCurrentUserProfileId();
+
+
             var post = _postRepository.GetPublishedPostById(id);
             if (post == null)
             {
