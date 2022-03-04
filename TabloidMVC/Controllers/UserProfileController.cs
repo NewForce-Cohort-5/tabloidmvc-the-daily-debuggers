@@ -41,8 +41,8 @@ namespace TabloidMVC.Controllers
             else
             {
                 // Non admin users will be redirected to home page when trying to view users
-                //return RedirectToAction("Index", "Home");
-                return Redirect(Request.GetTypedHeaders().Referer.ToString());
+                return RedirectToAction("Index", "Home");
+                //return Redirect(Request.GetTypedHeaders().Referer.ToString());
             }
         }
 
