@@ -30,7 +30,12 @@ namespace TabloidMVC.Repositories
                         Left JOIN Post p on c.PostId = p.Id
                         LEFT JOIN UserProfile u ON c.UserProfileId = u.Id
                         LEFT JOIN UserType ut on u.UserTypeId = ut.Id
-                        WHERE c.PostId = p.id";
+                        WHERE c.PostId = @id
+                        ";
+                    
+                    //This is how you pass the id parameter into the sql query
+                    cmd.Parameters.AddWithValue("id", id);
+
                     var reader = cmd.ExecuteReader();
 
                     var comments = new List<Comment>();

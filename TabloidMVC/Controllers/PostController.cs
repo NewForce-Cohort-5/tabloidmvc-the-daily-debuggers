@@ -76,6 +76,7 @@ namespace TabloidMVC.Controllers
         {
             Post post = _postRepository.GetPublishedPostById(id);
             List<Comment> comment = _commentRepository.GetAllCommentsByPostId(id);
+            
 
             //Sort by CreatedDateTime newest created first
             comment.Sort((y, x) => DateTime.Compare(x.CreateDateTime, y.CreateDateTime));
