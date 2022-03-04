@@ -102,6 +102,10 @@ namespace TabloidMVC.Repositories
 
                     cmd.Parameters.AddWithValue("@id", Id);
                     cmd.ExecuteNonQuery();
+
+                    int newlyCreatedId = (int)cmd.ExecuteScalar();
+
+                    category.Id = newlyCreatedId;
                 }
             }
         }
