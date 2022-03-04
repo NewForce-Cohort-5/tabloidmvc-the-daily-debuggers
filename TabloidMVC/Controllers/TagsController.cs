@@ -32,21 +32,22 @@ namespace TabloidMVC.Controllers
         // GET: TagsController/Create
         public ActionResult Create()
         {
-            return View();
+            return View(new Tag());
         }
 
         // POST: TagsController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(Tag tag)
         {
             try
             {
+                _tagRepo.AddTag(tag);
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return View(tag);
             }
         }
 

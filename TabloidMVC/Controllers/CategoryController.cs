@@ -88,6 +88,7 @@ namespace TabloidMVC.Controllers
         public ActionResult Delete(int id)
         {
             Category category = _categoryRepository.GetCategoryById(id);
+            ViewData["Message"] = $"Are you sure you want to delete {category.Name}?";
             return View(category);
         }
 
@@ -104,6 +105,13 @@ namespace TabloidMVC.Controllers
             catch (Exception)
             {
                 return View(category);
+            catch (Exception ex)
+            {
+                if (ex.Message.Contains("The DELETE statement conflicted with the REFERENCE constraint"))
+                {
+                    ViewData["Message"] = $"This category cannot be deleted";
+                }
+                    return View(category);
             }
         }
     }
