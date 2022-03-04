@@ -45,8 +45,8 @@ namespace TabloidMVC.Controllers
             //Return posts
             var posts = _postRepository.GetAllPublishedPosts();
             //Sort Only posts that match current user
-            posts.Where(p => GetCurrentUserProfileId() == p.UserProfileId);
-            
+            posts = posts.Where(p => GetCurrentUserProfileId() == p.UserProfileId).ToList();
+
             //Sort by CreatedDateTime newest created first
             posts.Sort((y, x) => DateTime.Compare(x.CreateDateTime, y.CreateDateTime));
             return View(posts);
@@ -54,6 +54,7 @@ namespace TabloidMVC.Controllers
 
         public IActionResult Details(int id)
         {
+            ViewData["currentUserId"] = GetCurrentUserProfileId();
             var post = _postRepository.GetPublishedPostById(id);
             if (post == null)
             {
@@ -71,19 +72,21 @@ namespace TabloidMVC.Controllers
         {
             Post post = _postRepository.GetPublishedPostById(id);
             List<Comment> comment = _commentRepository.GetAllCommentsByPostId(id);
-            var vm = new PostCreateViewModel()
+
+            //Sort by CreatedDateTime newest created first
+            comment.Sort((y, x) => DateTime.Compare(x.CreateDateTime, y.CreateDateTime));
+            var vm = new PostIndexViewModel()
             {
                 Post = post,
                 Comments = comment
 
             };
-            
-            //if (comment == null)
-            //{
+            if (comment == null)
+            {
 
-            //        return NotFound();
+                return NotFound();
 
-            //}
+            }
             return View(vm);
         }
 

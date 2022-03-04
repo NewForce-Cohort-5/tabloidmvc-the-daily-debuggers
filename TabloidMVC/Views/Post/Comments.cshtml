@@ -5,7 +5,11 @@
     ViewData["Title"] = "Comments";
 }
 <div class="container pt-5">
-<h1>Comments for @Model.Post.Title</h1>
+<h1>@Model.Post.Title</h1>
+<h3>Comments</h3>
+<div>
+        <a asp-action="Details" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1">Back to Post</a>
+</div>
 
 <div>
     <hr />
@@ -14,15 +18,15 @@
             <tr>
         
                 <th class = "col-sm-2">
-                    User
-                </th>
-        
-                <th class = "col-sm-2">
                    Subject
                 </th>
         
                 <th class = "col-sm-2">
-                    Comment
+                   Comment
+                </th>
+        
+                <th class = "col-sm-2">
+                    User
                 </th>
         
                 <th class = "col-sm-2">
@@ -35,14 +39,15 @@
             {
                 <tr>
                     
-                    <td>
-                        @Html.DisplayFor(modelItem => item.UserProfile.DisplayName)
-                    </td>
+                    
                     <td>
                         @Html.DisplayFor(modelItem => item.Subject)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.Content)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserProfile.DisplayName)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.CreateDateTime)
@@ -55,8 +60,5 @@
     
 </div>
 
-<div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    <a asp-action="Index">Back to List</a>
-</div>
+
 </div>
