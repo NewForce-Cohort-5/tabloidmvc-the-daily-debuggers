@@ -102,9 +102,6 @@ namespace TabloidMVC.Controllers
                 _categoryRepository.DeleteCategory(id);
                 return RedirectToAction(nameof(Index));
             }
-            catch (Exception)
-            {
-                return View(category);
             catch (Exception ex)
             {
                 if (ex.Message.Contains("The DELETE statement conflicted with the REFERENCE constraint"))
