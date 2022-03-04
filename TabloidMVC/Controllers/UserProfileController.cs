@@ -50,6 +50,10 @@ namespace TabloidMVC.Controllers
         public ActionResult Details(int id)
         {
             UserProfile userProfile = _userProfileRepository.GetById(id);
+            if (userProfile.ImageLocation == null)
+            {
+                userProfile.ImageLocation = "https://avatars.dicebear.com/api/bottts/.svg";
+            }
             return View(userProfile);
         }
 

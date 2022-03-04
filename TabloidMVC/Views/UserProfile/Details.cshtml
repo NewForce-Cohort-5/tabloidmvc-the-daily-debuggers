@@ -5,23 +5,16 @@
 }
 
 <div class="container pt-5">
-    <h1>Details</h1>
-
     <div>
         <h4>User Profile</h4>
         <hr />
+        <img style="width:170px;float:left;margin-right:20px" src="@Model.ImageLocation" />
         <dl class="row">
             <dt class="col-sm-2">
                 Full Name
             </dt>
             <dd class="col-sm-10">
                 @Html.DisplayFor(model => model.FullName)
-            </dd>
-            <dt class="col-sm-2">
-                Image
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.ImageLocation)
             </dd>
             <dt class="col-sm-2">
                 Username
@@ -48,6 +41,7 @@
                 @Html.DisplayFor(model => model.UserType.Name)
             </dd>
         </dl>
+        <hr />
     </div>
     <div>
         @*@Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |*@
