@@ -1,54 +1,62 @@
-﻿@model TabloidMVC.Models.Comment
+﻿@*Passing a list into a model expecting a single object*@
+@model TabloidMVC.Models.ViewModels.PostIndexViewModel
 
 @{
     ViewData["Title"] = "Comments";
 }
-
-<h1>Comments</h1>
+<div class="container pt-5">
+<h1>Comments for @Model.Post.Title</h1>
 
 <div>
-    <h4>Comment</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Id)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PostId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PostId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UserProfileId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UserProfileId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Subject)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Subject)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Content)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Content)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreateDateTime)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreateDateTime)
-        </dd>
-    </dl>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+        
+                <th class = "col-sm-2">
+                    User
+                </th>
+        
+                <th class = "col-sm-2">
+                   Subject
+                </th>
+        
+                <th class = "col-sm-2">
+                    Comment
+                </th>
+        
+                <th class = "col-sm-2">
+                    Date
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach(var item in Model.Comments)
+            {
+                <tr>
+                    
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserProfile.DisplayName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Subject)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Content)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreateDateTime)
+                    </td>
+                </tr>
+
+            }
+        </tbody>
+        </table>
+    
 </div>
+
 <div>
     @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
     <a asp-action="Index">Back to List</a>
+</div>
 </div>

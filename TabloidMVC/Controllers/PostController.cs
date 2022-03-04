@@ -69,14 +69,22 @@ namespace TabloidMVC.Controllers
 
         public IActionResult Comments(int id)
         {
-            var comment = _commentRepository.GetAllCommentsByPostId(id);
+            Post post = _postRepository.GetPublishedPostById(id);
+            List<Comment> comment = _commentRepository.GetAllCommentsByPostId(id);
+            var vm = new PostCreateViewModel()
+            {
+                Post = post,
+                Comments = comment
+
+            };
+            
             //if (comment == null)
             //{
-                
+
             //        return NotFound();
-                
+
             //}
-            return View(comment);
+            return View(vm);
         }
 
         public IActionResult MyPostDetails(int id)
