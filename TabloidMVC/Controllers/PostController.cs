@@ -9,6 +9,7 @@ using TabloidMVC.Models;
 using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 
 namespace TabloidMVC.Controllers
 {
@@ -17,11 +18,13 @@ namespace TabloidMVC.Controllers
     {
         private readonly IPostRepository _postRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly ITagRepository _tagRepository;
 
-        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository)
+        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, ITagRepository tagRepository)
         {
             _postRepository = postRepository;
             _categoryRepository = categoryRepository;
+            _tagRepository = tagRepository;
         }
 
         //Posts sorted by PublishDateTime newest first
@@ -201,6 +204,48 @@ namespace TabloidMVC.Controllers
             catch (Exception ex)
             {
                 return View(post);
+            }
+        }
+
+        public ActionResult ManageTags(int id)
+        {
+            Post post = _postRepository.GetPublishedPostById(id);
+            List<Tag> postTags = _tagRepository.GetTagsByPostId(id);
+            List<Tag> tags = _tagRepository.GetAllTags();
+
+            PostTagViewModel ptvm = new PostTagViewModel()
+            {
+                Post = post,
+                PostTags = postTags,
+                Tags = tags
+            };
+
+            return View(ptvm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+
+        public ActionResult ManageTags(int id, IFormCollection formCollection)
+        {
+            try
+            {
+                return View();
+            }
+            catch(Exception ex)
+            {
+                Post post = _postRepository.GetPublishedPostById(id);
+                List<Tag> postTags = _tagRepository.GetTagsByPostId(id);
+                List<Tag> tags = _tagRepository.GetAllTags();
+
+                PostTagViewModel ptvm = new PostTagViewModel()
+                {
+                    Post = post,
+                    PostTags = postTags,
+                    Tags = tags
+                };
+
+                return View(ptvm);
             }
         }
     }

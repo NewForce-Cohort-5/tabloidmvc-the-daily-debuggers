@@ -1,0 +1,52 @@
+﻿@model TabloidMVC.Models.ViewModels.PostTagViewModel
+@{
+    ViewData["Title"] = "Manage Tags";
+
+    Dictionary<string, bool> hashTag = new Dictionary<string, bool>();
+
+    foreach(Tag tag in Model.PostTags)
+    {
+        hashTag.Add(tag.Name, true);
+    }
+
+    foreach(Tag tag in Model.Tags)
+    {
+        if(!hashTag.ContainsKey(tag.Name))
+        {
+            hashTag.Add(tag.Name, false);
+        }
+    }
+}
+
+<div class="container pt-5">
+    <h1>ManageTags</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            <form asp-action="ManageTags">
+            @foreach (Tag tag in Model.Tags)
+           {
+               <tr>
+                    <td>@tag.Name</td>
+                          
+                    <td>
+                        <div class="form-check form-switch">
+                            <input asp-for="@hashTag[tag.Name]" type="checkbox" checked="@hashTag[tag.Name]"  class="form-check-input" />
+                        </div>
+                    </td>
+                    
+               </tr>
+           }
+                <div class="form-group">
+                    <input type="submit" value="SAVE" class="btn btn-primary" />
+                </div>
+            </form>
+        </tbody>
+    </table>
+</div>
+
