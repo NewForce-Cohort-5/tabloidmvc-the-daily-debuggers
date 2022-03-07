@@ -3,9 +3,12 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1>Edit Post</h1>
 
-<h4>Post</h4>
+
+ <div>
+        <a asp-action="MyPosts">Back to My Posts</a>
+    </div>
 <hr />
 <div class="container pt-5">
     <div class="row justify-content-center">
@@ -58,13 +61,15 @@
                 <div class="form-group">
                     <input type="submit" value="SAVE" class="btn btn-primary btn-block" />
                 </div>
+                <div>
+                <a asp-action="MyPosts" class="btn btn-primary btn-block">Cancel</a>
+                </div>
+                
             </form>
         </div>
     </div>
 
-    <div>
-        <a asp-action="Index">Back to List</a>
-    </div>
+   
 </div>
 
 @section Scripts {

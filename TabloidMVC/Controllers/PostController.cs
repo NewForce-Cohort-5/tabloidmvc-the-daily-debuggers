@@ -17,11 +17,15 @@ namespace TabloidMVC.Controllers
     {
         private readonly IPostRepository _postRepository;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly ICommentRepository _commentRepository;
 
-        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository)
+
+        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, ICommentRepository commentRepository)
         {
             _postRepository = postRepository;
             _categoryRepository = categoryRepository;
+            _commentRepository = commentRepository;
+
         }
 
         //Posts sorted by PublishDateTime newest first
@@ -51,6 +55,11 @@ namespace TabloidMVC.Controllers
 
         public IActionResult Details(int id)
         {
+
+            //Pass the Current userid to HTML file
+            ViewData["currentUserId"] = GetCurrentUserProfileId();
+
+
             var post = _postRepository.GetPublishedPostById(id);
             if (post == null)
             {
@@ -62,6 +71,29 @@ namespace TabloidMVC.Controllers
                 }
             }
             return View(post);
+        }
+
+        public IActionResult Comments(int id)
+        {
+            Post post = _postRepository.GetPublishedPostById(id);
+            List<Comment> comment = _commentRepository.GetAllCommentsByPostId(id);
+            
+
+            //Sort by CreatedDateTime newest created first
+            comment.Sort((y, x) => DateTime.Compare(x.CreateDateTime, y.CreateDateTime));
+            var vm = new PostIndexViewModel()
+            {
+                Post = post,
+                Comments = comment
+
+            };
+            if (comment == null)
+            {
+
+                return NotFound();
+
+            }
+            return View(vm);
         }
 
         public IActionResult MyPostDetails(int id)
@@ -166,7 +198,7 @@ namespace TabloidMVC.Controllers
                 post.UserProfileId = GetCurrentUserProfileId();
                 _postRepository.UpdatePost(post);
 
-                return RedirectToAction("Index");
+                return RedirectToAction("MyPosts");
             }
             catch (Exception ex)
             {
