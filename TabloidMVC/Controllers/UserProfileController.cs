@@ -54,7 +54,16 @@ namespace TabloidMVC.Controllers
             {
                 userProfile.ImageLocation = "https://avatars.dicebear.com/api/bottts/.svg";
             }
-            return View(userProfile);
+            int userId = GetCurrentUserId();
+            UserProfile userProfiles = _userProfileRepository.GetById(userId);
+            if (userProfiles.UserType.Id == 1)
+            {
+                return View(userProfile);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         // GET: UserProfileController/Create
