@@ -10,6 +10,9 @@
 <div>
         <a asp-action="Details" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1">Back to Post</a>
 </div>
+<div>
+        <a asp-controller="Comment" asp-action="Create" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1">Add Comment</a>
+</div>
 
 <div>
     <hr />

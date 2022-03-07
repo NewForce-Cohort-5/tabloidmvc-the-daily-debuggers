@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TabloidMVC.Repositories;
+using TabloidMVC.Models.ViewModels;
+using TabloidMVC.Models;
+using System.Security.Claims;
 
 namespace TabloidMVC.Controllers
 {
@@ -30,23 +33,41 @@ namespace TabloidMVC.Controllers
         }
 
         // GET: CommentController/Create
-        public ActionResult Create()
+        public ActionResult Create(int id)
         {
-            return View();
+            Post post = _postRepository.GetPublishedPostById(id);
+            Comment comment = new Comment();
+            var vm = new CreateCommentViewModel()
+            {
+                Post = post,
+                Comment = comment
+            };
+                    
+
+            return View(vm);
         }
 
         // POST: CommentController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public ActionResult Create(int id, Comment comment)
         {
+            Post post = _postRepository.GetPublishedPostById(id);
+            var vm = new CreateCommentViewModel()
+            {
+                Post = post,
+                Comment = comment
+            };
             try
             {
-                return RedirectToAction(nameof(Index));
+                vm.Comment.PostId = id;
+                vm.Comment.UserProfileId = GetCurrentUserProfileId();
+                _commentRepository.Add(comment);
+                return RedirectToAction("Comments", "Post", new { id = id });
             }
             catch
             {
-                return View();
+                return View(vm);
             }
         }
 
@@ -90,6 +111,12 @@ namespace TabloidMVC.Controllers
             {
                 return View();
             }
+        }
+
+        private int GetCurrentUserProfileId()
+        {
+            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return int.Parse(id);
         }
     }
 }

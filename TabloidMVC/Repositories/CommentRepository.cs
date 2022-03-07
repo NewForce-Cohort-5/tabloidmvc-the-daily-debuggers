@@ -108,13 +108,11 @@ namespace TabloidMVC.Repositories
                             PostId, UserProfileId, Subject, Content, CreateDateTime )
                         OUTPUT INSERTED.ID
                         VALUES (
-                            @PostId, @UserProfileId, @Subject, @Content, @CreateDateTime )";
+                            @PostId, @UserProfileId, @Subject, @Content, SYSDATETIME())";
                     cmd.Parameters.AddWithValue("@PostId", comment.PostId);
                     cmd.Parameters.AddWithValue("@UserProfileId", comment.UserProfileId);
                     cmd.Parameters.AddWithValue("@Subject", DbUtils.ValueOrDBNull(comment.Subject));
-                    cmd.Parameters.AddWithValue("@CreateDateTime", comment.CreateDateTime);
                     cmd.Parameters.AddWithValue("@Content", DbUtils.ValueOrDBNull(comment.Content));
-                    cmd.Parameters.AddWithValue("@CreateDateTime", comment.CreateDateTime);
 
                     comment.Id = (int)cmd.ExecuteScalar();
                 }
