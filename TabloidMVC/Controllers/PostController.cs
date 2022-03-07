@@ -22,7 +22,7 @@ namespace TabloidMVC.Controllers
         private readonly ICommentRepository _commentRepository;
         private readonly ITagRepository _tagRepository;
 
-        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, ICommentRepository commentRepository ITagRepository tagRepository)
+        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, ICommentRepository commentRepository, ITagRepository tagRepository)
         {
             _postRepository = postRepository;
             _categoryRepository = categoryRepository;
@@ -261,8 +261,27 @@ namespace TabloidMVC.Controllers
         {
             try
             {
-                var selectedTags = formCollection.Select(tag => tag.Key.Substring())
-                return View();
+                List<int> tagIds = new List<int>();
+
+                // Extract the tag ids from the checkboxes that are in the form
+                foreach(var form in formCollection)
+                {
+
+                    // Not all of the form objects are the checkboxes so check and make sure were getting just those
+                    if(form.Key.StartsWith("hashTag"))
+                    {
+                        // If a tag was selected then the first value from the form object will be true
+                        if(form.Value.First() == "true")
+                        {
+                            // Use regex to get the tag id from the checkbox's key
+                            int tagId = int.Parse(Regex.Match(form.Key, @"\d+").Value);
+                            tagIds.Add(tagId);
+                        }
+                    }
+                }
+                _postRepository.ManageTags(id, tagIds);
+
+                return View("MyPostDetails", _postRepository.GetPublishedPostById(id));
             }
             catch(Exception ex)
             {

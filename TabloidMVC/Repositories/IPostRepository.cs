@@ -12,5 +12,6 @@ namespace TabloidMVC.Repositories
         public void UpdatePost(Post post);
         public void DeletePost(int postId);
         List<Comment> GetPostComments(int postId);
+        public void ManageTags(int id, List<int> tagIds);
     }
 }
