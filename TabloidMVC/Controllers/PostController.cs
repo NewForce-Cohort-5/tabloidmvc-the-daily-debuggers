@@ -4,11 +4,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Security.Claims;
 using TabloidMVC.Models;
 using TabloidMVC.Models.ViewModels;
 using TabloidMVC.Repositories;
 using System.Linq;
+using Microsoft.AspNetCore.Http;
 
 namespace TabloidMVC.Controllers
 {
@@ -18,14 +20,14 @@ namespace TabloidMVC.Controllers
         private readonly IPostRepository _postRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly ICommentRepository _commentRepository;
+        private readonly ITagRepository _tagRepository;
 
-
-        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, ICommentRepository commentRepository)
+        public PostController(IPostRepository postRepository, ICategoryRepository categoryRepository, ICommentRepository commentRepository, ITagRepository tagRepository)
         {
             _postRepository = postRepository;
             _categoryRepository = categoryRepository;
             _commentRepository = commentRepository;
-
+            _tagRepository = tagRepository;
         }
 
         //Posts sorted by PublishDateTime newest first
@@ -233,6 +235,68 @@ namespace TabloidMVC.Controllers
             catch (Exception ex)
             {
                 return View(post);
+            }
+        }
+
+        public ActionResult ManageTags(int id)
+        {
+            Post post = _postRepository.GetPublishedPostById(id);
+            List<Tag> postTags = _tagRepository.GetTagsByPostId(id);
+            List<Tag> tags = _tagRepository.GetAllTags();
+
+            PostTagViewModel ptvm = new PostTagViewModel()
+            {
+                Post = post,
+                PostTags = postTags,
+                Tags = tags
+            };
+
+            return View(ptvm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+
+        public ActionResult ManageTags(int id, IFormCollection formCollection)
+        {
+            try
+            {
+                List<int> tagIds = new List<int>();
+
+                // Extract the tag ids from the checkboxes that are in the form
+                foreach(var form in formCollection)
+                {
+
+                    // Not all of the form objects are the checkboxes so check and make sure were getting just those
+                    if(form.Key.StartsWith("hashTag"))
+                    {
+                        // If a tag was selected then the first value from the form object will be true
+                        if(form.Value.First() == "true")
+                        {
+                            // Use regex to get the tag id from the checkbox's key
+                            int tagId = int.Parse(Regex.Match(form.Key, @"\d+").Value);
+                            tagIds.Add(tagId);
+                        }
+                    }
+                }
+                _postRepository.ManageTags(id, tagIds);
+
+                return View("MyPostDetails", _postRepository.GetPublishedPostById(id));
+            }
+            catch(Exception ex)
+            {
+                Post post = _postRepository.GetPublishedPostById(id);
+                List<Tag> postTags = _tagRepository.GetTagsByPostId(id);
+                List<Tag> tags = _tagRepository.GetAllTags();
+
+                PostTagViewModel ptvm = new PostTagViewModel()
+                {
+                    Post = post,
+                    PostTags = postTags,
+                    Tags = tags
+                };
+
+                return View(ptvm);
             }
         }
     }
