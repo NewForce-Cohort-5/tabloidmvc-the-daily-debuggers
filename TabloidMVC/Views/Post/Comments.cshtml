@@ -1,0 +1,67 @@
+﻿@*Passing a list into a model expecting a single object*@
+@model TabloidMVC.Models.ViewModels.PostIndexViewModel
+
+@{
+    ViewData["Title"] = "Comments";
+}
+<div class="container pt-5">
+<h1>@Model.Post.Title</h1>
+<h3>Comments</h3>
+<div>
+        <a asp-action="Details" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1">Back to Post</a>
+</div>
+<div>
+        <a asp-controller="Comment" asp-action="Create" asp-route-id="@Model.Post.Id" class="btn btn-outline-primary mx-1">Add Comment</a>
+</div>
+
+<div>
+    <hr />
+    <table class="table table-striped">
+        <thead>
+            <tr>
+        
+                <th class = "col-sm-2">
+                   Subject
+                </th>
+        
+                <th class = "col-sm-2">
+                   Comment
+                </th>
+        
+                <th class = "col-sm-2">
+                    User
+                </th>
+        
+                <th class = "col-sm-2">
+                    Date
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach(var item in Model.Comments)
+            {
+                <tr>
+                    
+                    
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Subject)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Content)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserProfile.DisplayName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreateDateTime)
+                    </td>
+                </tr>
+
+            }
+        </tbody>
+        </table>
+    
+</div>
+
+
+</div>

@@ -49,7 +49,21 @@ namespace TabloidMVC.Controllers
         // GET: UserProfileController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            UserProfile userProfile = _userProfileRepository.GetById(id);
+            if (userProfile.ImageLocation == null)
+            {
+                userProfile.ImageLocation = "https://avatars.dicebear.com/api/bottts/.svg";
+            }
+            int userId = GetCurrentUserId();
+            UserProfile userProfiles = _userProfileRepository.GetById(userId);
+            if (userProfiles.UserType.Id == 1)
+            {
+                return View(userProfile);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         // GET: UserProfileController/Create
