@@ -2,18 +2,18 @@
 @{
     ViewData["Title"] = "Manage Tags";
 
-    Dictionary<string, bool> hashTag = new Dictionary<string, bool>();
+    Dictionary<int, bool> hashTag = new Dictionary<int, bool>();
 
     foreach(Tag tag in Model.PostTags)
     {
-        hashTag.Add(tag.Name, true);
+        hashTag.Add(tag.Id, true);
     }
 
     foreach(Tag tag in Model.Tags)
     {
-        if(!hashTag.ContainsKey(tag.Name))
+        if(!hashTag.ContainsKey(tag.Id))
         {
-            hashTag.Add(tag.Name, false);
+            hashTag.Add(tag.Id, false);
         }
     }
 }
@@ -36,7 +36,7 @@
                           
                     <td>
                         <div class="form-check form-switch">
-                            <input asp-for="@hashTag[tag.Name]" type="checkbox" checked="@hashTag[tag.Name]"  class="form-check-input" />
+                            <input asp-for="@hashTag[tag.Id]" type="checkbox" checked="@hashTag[tag.Id]"  class="form-check-input" />
                         </div>
                     </td>
                     

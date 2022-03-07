@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Security.Claims;
 using TabloidMVC.Models;
 using TabloidMVC.Models.ViewModels;
@@ -230,6 +231,7 @@ namespace TabloidMVC.Controllers
         {
             try
             {
+                var selectedTags = formCollection.Select(tag => tag.Key.Substring())
                 return View();
             }
             catch(Exception ex)
